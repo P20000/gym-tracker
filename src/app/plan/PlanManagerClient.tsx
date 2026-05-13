@@ -138,19 +138,27 @@ export default function PlanManagerClient({
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8 z-10">
       {/* Top bar with back to home link */}
-      <div className="flex items-center justify-between border-b border-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-4 gap-4">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">Weekly Plan Manager</h1>
           <p className="text-muted-foreground text-sm mt-1">
             Configure routines for each day of the week. Dispatcher auto-loads today&apos;s routine.
           </p>
         </div>
-        <Link
-          href="/"
-          className="touch-target haptic-btn inline-flex items-center px-4 py-2 bg-secondary text-secondary-foreground text-sm font-semibold rounded-xl border border-border hover:bg-secondary/80 transition-all"
-        >
-          ⬅ Back to Dashboard
-        </Link>
+        <div className="flex items-center space-x-3">
+          <Link
+            href="/plan/import"
+            className="touch-target haptic-btn inline-flex items-center px-4 py-2 bg-primary/10 text-primary text-sm font-bold rounded-xl border border-primary/20 hover:bg-primary/20 transition-all"
+          >
+            ⚡ Bulk Import
+          </Link>
+          <Link
+            href="/"
+            className="touch-target haptic-btn inline-flex items-center px-4 py-2 bg-secondary text-secondary-foreground text-sm font-semibold rounded-xl border border-border hover:bg-secondary/80 transition-all"
+          >
+            ⬅ Dashboard
+          </Link>
+        </div>
       </div>
 
       {/* 7-Day Horizontal Tabs */}

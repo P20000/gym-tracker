@@ -10,6 +10,12 @@
 - [x] Build the "Increment/Decrement" logging component.
 - [x] Implement Optimistic Updates for set completion.
 
-## Phase 3: Tremor Dashboards [ ]
+## Phase 3: Regex Plan Ingestion [x]
+- [x] Build `workoutParser.ts` regex utility (day detection, exercise extraction, checkbox handling).
+- [x] Create `/plan/import` page with 3-step flow (Input → Review → Done).
+- [x] Implement `bulkImportAction` with slug-based exercise matching and overwrite/skip conflict resolution.
+- [x] Add live validation counter and horizontally scrollable review table.
+
+## Phase 4: Tremor Dashboards [ ]
 - [ ] Create Muscle Group Volume Chart.
 - [ ] Create e1RM Progression Line Graph.
