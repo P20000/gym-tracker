@@ -2,7 +2,7 @@
 
 A serverless, mobile-first gym and progression tracker designed for seamless daily workout logging, strength analytics, and quick-add nutrition tracking.
 
-## 🚀 Architecture Overview
+## Architecture Overview
 
 This project is built using a fully serverless, highly optimized stack on **Vercel** and **Supabase**. This minimizes operational overhead, ensures low latency on mobile devices, and keeps running costs at $0.
 
@@ -12,7 +12,7 @@ This project is built using a fully serverless, highly optimized stack on **Verc
 
 ---
 
-## ✨ Core Features & Implementation
+## Core Features & Implementation
 
 ### 1. Strength Tracking & Progression Logic
 * **Volume & e1RM Calculations:** Leverages Vercel Edge Functions to calculate Volume Load ($\text{Sets} \times \text{Reps} \times \text{Weight}$) and Estimated 1-Rep Max (e1RM).
@@ -29,7 +29,7 @@ This project is built using a fully serverless, highly optimized stack on **Verc
 
 ---
 
-## 📊 Infrastructure Comparison: AWS EKS vs. Vercel
+## Infrastructure Comparison: AWS EKS vs. Vercel
 
 | Feature | AWS EKS Setup | Vercel Serverless (Proposed) |
 | :--- | :--- | :--- |
