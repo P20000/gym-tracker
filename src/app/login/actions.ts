@@ -156,6 +156,7 @@ export async function verifyToken(token: string) {
     };
   } catch (error) {
     console.error("Error verifying token:", error);
-    return { success: false, error: "Verification failed due to a system error" };
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return { success: false, error: `Verification failed (${errorMessage})` };
   }
 }
