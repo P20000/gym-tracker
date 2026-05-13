@@ -64,7 +64,7 @@ export default async function HomePage() {
             </h1>
             <p className="text-muted-foreground text-base max-w-lg">
               Your serverless SQLite strength stack is live and fully synchronized. 
-              Let's lock in those progression metrics.
+              Let&apos;s lock in those progression metrics.
             </p>
           </div>
 
@@ -92,8 +92,8 @@ export default async function HomePage() {
           {/* Developer status panel */}
           <div className="p-4 bg-secondary/50 border border-border rounded-lg text-xs text-muted-foreground font-mono space-y-1">
             <p>🔧 LOCAL CLIENT ENVIRONMENT STATE:</p>
-            <p>• Tenant Isolation Key: "{user.userId}"</p>
-            <p>• Database Sync Hook: "Turso / Drizzle Core (libSQL)"</p>
+            <p>• Tenant Isolation Key: &quot;{user.userId}&quot;</p>
+            <p>• Database Sync Hook: &quot;Turso / Drizzle Core (libSQL)&quot;</p>
             <p>• Node Version: Next.js 15 (Edge Compatible Session Engine)</p>
           </div>
         </div>

@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
     try {
       const { payload: decoded } = await jwtVerify(token, JWT_SECRET);
       payload = decoded;
-    } catch (err) {
+    } catch {
       // Invalid or expired JWT - clear cookie and let flow continue (it will redirect below)
       const response = NextResponse.redirect(new URL("/login", request.url));
       response.cookies.delete("gym_auth_token");

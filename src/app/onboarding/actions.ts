@@ -4,7 +4,6 @@ import { db } from "@/db";
 import { profiles } from "@/db/schema";
 import { getAuthUser } from "@/lib/auth";
 import { z } from "zod";
-import { redirect } from "next/navigation";
 
 const onboardingSchema = z.object({
   name: z
@@ -14,7 +13,7 @@ const onboardingSchema = z.object({
     .trim(),
 });
 
-export async function saveOnboardingProfile(prevState: any, formData: FormData) {
+export async function saveOnboardingProfile(prevState: unknown, formData: FormData) {
   const user = await getAuthUser();
   if (!user) {
     return { success: false, error: "You must be logged in to onboard." };

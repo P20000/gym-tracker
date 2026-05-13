@@ -15,7 +15,7 @@ const emailSchema = z.object({
  * Creates or updates a user, generates a magic login token,
  * and prints the magic login URL to the terminal console.
  */
-export async function sendMagicLink(prevState: any, formData: FormData) {
+export async function sendMagicLink(prevState: unknown, formData: FormData) {
   const rawEmail = formData.get("email") as string;
   const validation = emailSchema.safeParse({ email: rawEmail });
 
