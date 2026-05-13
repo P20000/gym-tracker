@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real, sqliteView } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { sql } from "drizzle-orm";
 
 // 1. Users Table (Handles local JWT session/magic link verification)
@@ -101,25 +101,6 @@ export const proteinLogs = sqliteTable("protein_logs", {
   createdAt: integer("created_at").default(sql`(strftime('%s', 'now') * 1000)`),
 });
 
-// 8. Strength Progression View (Calculates e1RM for each completed set using the Brzycki Formula)
-export const strengthProgressionView = sqliteView("v_strength_progression", {
-  id: text("id"),
-  userId: text("user_id"),
-  exerciseId: text("exercise_id"),
-  weight: real("weight"),
-  reps: integer("reps"),
-  e1rm: real("e1rm"),
-  createdAt: integer("created_at"),
-}).as(
-  sql`SELECT 
-        id, 
-        user_id, 
-        exercise_id, 
-        weight, 
-        reps, 
-        (weight * 36.0 / (37.0 - reps)) as e1rm, 
-        created_at 
-      FROM workout_logs 
-      WHERE completed = 1 AND reps < 37 AND reps > 0`
-);
+// NOTE: The v_strength_progression SQLite view is applied directly via raw SQL
+// (see src/db/migrations/apply-view.ts) because drizzle-kit push does not support views.
 

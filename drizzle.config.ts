@@ -8,4 +8,5 @@ export default defineConfig({
     url: process.env.TURSO_DATABASE_URL || "file:local.db",
     authToken: process.env.TURSO_AUTH_TOKEN,
   },
+  tablesFilter: ["!v_*"], // Exclude all views (prefixed with v_) from push introspection
 });
