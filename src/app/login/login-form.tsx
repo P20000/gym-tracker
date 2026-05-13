@@ -9,10 +9,12 @@ export default function LoginForm() {
     success: boolean;
     error: string | null;
     message: string | null;
+    magicLink: string | null;
   }>({
     success: false,
     error: null,
     message: null,
+    magicLink: null,
   });
   const [isPending, startTransition] = useTransition();
 
@@ -20,7 +22,7 @@ export default function LoginForm() {
     e.preventDefault();
     if (!email) return;
 
-    setState({ success: false, error: null, message: null });
+    setState({ success: false, error: null, message: null, magicLink: null });
 
     startTransition(async () => {
       const formData = new FormData();
@@ -32,12 +34,14 @@ export default function LoginForm() {
           success: true,
           error: null,
           message: res.message || "Magic Link generated successfully!",
+          magicLink: res.magicLink || null,
         });
       } else {
         setState({
           success: false,
           error: res.error || "Failed to send login link",
           message: null,
+          magicLink: null,
         });
       }
     });
@@ -57,16 +61,29 @@ export default function LoginForm() {
       {state.success ? (
         <div className="flex flex-col space-y-4 text-center">
           <div className="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-lg text-emerald-300 text-sm">
-            <p className="font-semibold mb-1">✨ Magic Link Generated!</p>
+            <p className="font-semibold mb-1">✨ Verification Link Ready!</p>
             <p>{state.message}</p>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Since we are in local development mode, we printed your login link to the 
-            <strong> terminal console where your Next.js dev server is running</strong>.
-          </p>
+
+          {state.magicLink && (
+            <div className="p-4 bg-secondary/50 border border-border rounded-lg space-y-3">
+              <p className="text-xs text-muted-foreground">
+                {process.env.NODE_ENV === "production"
+                  ? "For this live demo environment, you can instantly sign in using the secure link below:"
+                  : "We printed your login link to your dev terminal. You can also click below:"}
+              </p>
+              <a
+                href={state.magicLink}
+                className="touch-target haptic-btn inline-flex items-center justify-center w-full py-3 px-4 bg-primary text-primary-foreground font-semibold rounded-lg text-sm shadow-md hover:bg-primary/90"
+              >
+                🚀 Click Here to Log In Instantly
+              </a>
+            </div>
+          )}
+
           <button
             onClick={() => {
-              setState({ success: false, error: null, message: null });
+              setState({ success: false, error: null, message: null, magicLink: null });
               setEmail("");
             }}
             className="touch-target haptic-btn w-full mt-2 py-3 px-4 bg-secondary text-secondary-foreground font-medium rounded-lg hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"

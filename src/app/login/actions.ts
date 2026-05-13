@@ -76,7 +76,10 @@ export async function sendMagicLink(prevState: unknown, formData: FormData) {
     return {
       success: true,
       error: null,
-      message: "Check your console/terminal for the Magic Link!",
+      message: process.env.NODE_ENV === "production"
+        ? "Secure verification link generated successfully."
+        : "Check your console/terminal for the Magic Link!",
+      magicLink,
     };
   } catch (error) {
     console.error("Error in sendMagicLink:", error);
