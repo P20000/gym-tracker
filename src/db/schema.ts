@@ -28,6 +28,7 @@ export const templates = sqliteTable("templates", {
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
+  dayOfWeek: text("day_of_week"), // 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday'
   createdAt: integer("created_at").default(sql`(strftime('%s', 'now') * 1000)`),
 });
 
@@ -52,6 +53,20 @@ export const exercises = sqliteTable("exercises", {
   userId: text("user_id").references(() => users.id, { onDelete: "cascade" }), // Null means global default
   name: text("name").notNull(),
   muscleGroup: text("muscle_group").notNull(), // e.g., "Chest", "Delts", "Back", "Legs"
+  createdAt: integer("created_at").default(sql`(strftime('%s', 'now') * 1000)`),
+});
+
+// 5b. Template Exercises Table (Junction linking templates to exercises with sortOrder)
+// Defined after exercises to avoid forward reference
+export const templateExercises = sqliteTable("template_exercises", {
+  id: text("id").primaryKey(),
+  templateId: text("template_id")
+    .notNull()
+    .references(() => templates.id, { onDelete: "cascade" }),
+  exerciseId: text("exercise_id")
+    .notNull()
+    .references(() => exercises.id, { onDelete: "cascade" }),
+  sortOrder: integer("sort_order").notNull().default(0),
   createdAt: integer("created_at").default(sql`(strftime('%s', 'now') * 1000)`),
 });
 
