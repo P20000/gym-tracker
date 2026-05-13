@@ -80,9 +80,10 @@ export async function sendMagicLink(prevState: unknown, formData: FormData) {
     };
   } catch (error) {
     console.error("Error in sendMagicLink:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return {
       success: false,
-      error: "An unexpected error occurred. Please try again.",
+      error: `System Error (${errorMessage}). Please check Vercel environment variables or database tables.`,
     };
   }
 }
