@@ -39,19 +39,22 @@ const DAY_ABBREVIATIONS: Record<string, string> = {
 // Regex to detect a day header line: "Mon | ..." or "Monday | ..."
 const DAY_HEADER_RE = /^(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\s*\|/i;
 
-// Regex for exercise lines:
-// Supports formats like:
-//   [v] Bench Press – 4x8 @ 80kg
-//   [ ] OHP 3 sets x 10-12 reps @ 60
-//   Barbell Row 4x6-8 80kg
-//   - Squat: 5x5 @ 100kg
-//   [x] Incline DB Press — 3x10 @ 30kg
+// Primary exercise regex.
+// Supports Unicode dashes (\u2013 en-dash, \u2014 em-dash) in the reps group.
+// x/X separator is case-insensitive via the /i flag.
+// Weight group handles: "80kg", "0kg", "base 10kg", "30", "BW"
 const EXERCISE_RE =
-  /^[\[\-\*\s]*(?:\[([vVxX\s])\])?\s*[-\*]?\s*([A-Za-z][A-Za-z\s\/\(\)&,'.]+?)\s*[–—\-:]?\s*(\d+)\s*(?:x|sets?|X)\s*(\d+(?:[–\-]\d+)?)\s*(?:reps?)?\s*(?:@|at)?\s*([\d.]+\s*(?:kg|lbs?|lb)?|BW|bw|bodyweight)?/i;
+  /^[\[\-\*\s]*(?:\[([vVxX\s])\])?\s*[-\*]?\s*([A-Za-z][A-Za-z\s\/\(\)&,'.]+?)\s*[\u2013\u2014\-:]?\s*(\d+)\s*(?:sets?|x)\s*(\d+(?:[\u2013\u2014\-]\d+)?)\s*(?:reps?)?\s*(?:@|at)?\s*((?:base\s+)?[\d.]+\s*(?:kg|lbs?|lb)?|BW|bw|bodyweight)?/i;
 
-// Simpler fallback: "Name – NxM" or "Name Nx M"
+// Simpler fallback: "Name NxM" or "Name N x M"
 const SIMPLE_EXERCISE_RE =
-  /^[\[\-\*\s]*(?:\[([vVxX\s])\])?\s*[-\*]?\s*([A-Za-z][A-Za-z\s\/\(\)&,'.]+?)\s+(\d+)\s*[xX]\s*(\d+(?:[–\-–]\d+)?)\s*([\d.]+\s*(?:kg|lbs?)?|BW|bw)?/i;
+  /^[\[\-\*\s]*(?:\[([vVxX\s])\])?\s*[-\*]?\s*([A-Za-z][A-Za-z\s\/\(\)&,'.]+?)\s+(\d+)\s*x\s*(\d+(?:[\u2013\u2014\-]\d+)?)\s*((?:base\s+)?[\d.]+\s*(?:kg|lbs?)?|BW|bw)?/i;
+
+// Last-resort fallback: capture the entire line as an exercise name.
+// Used when both primary and simple regexes fail but the line looks like
+// an exercise name (starts with an optional checkbox then a word).
+const ACTIVITY_RE =
+  /^[\[\-\*\s]*(?:\[([vVxX\s])\])?\s*[-\*]?\s*([A-Za-z][A-Za-z\s\/\(\)&,'.–0-9]+)$/i;
 
 function normalizeDay(raw: string): string {
   const lower = raw.toLowerCase().slice(0, 3);
@@ -59,39 +62,63 @@ function normalizeDay(raw: string): string {
 }
 
 function parseExerciseLine(line: string): ParsedExercise | null {
-  // Strip leading bullets, numbers, and checkbox artifacts
+  // .trim() each line to eliminate invisible whitespace before any regex test
   const stripped = line
-    .replace(/^\s*\d+\.\s*/, "")
+    .replace(/^\s*\d+\.\s*/, "") // strip leading "1. "
     .trim();
 
   if (!stripped) return null;
 
-  // Try primary pattern first
+  // ── Primary pattern ──────────────────────────────────────────────────────
   let match = EXERCISE_RE.exec(stripped);
-  if (!match) {
-    match = SIMPLE_EXERCISE_RE.exec(stripped);
+
+  if (match) {
+    const checkboxChar = match[1] ?? "";
+    const checked = /[vVxX]/.test(checkboxChar);
+    const name = match[2].trim().replace(/\s+/g, " ");
+    const sets = parseInt(match[3], 10);
+    // Normalise all dash variants to ASCII hyphen in reps
+    const reps = (match[4] ?? "10")
+      .replace(/\u2013|\u2014/g, "-")
+      .replace("—", "-")
+      .replace("–", "-");
+    // Weight: strip optional "base " prefix, keep the numeric+unit part
+    const rawWeight = (match[5] ?? "").trim().replace(/^base\s+/i, "");
+    const weight = rawWeight || "0";
+
+    if (name.length < 3) return null;
+    return { name, sets: isNaN(sets) ? 3 : sets, reps, weight, checked, raw: line };
   }
 
-  if (!match) return null;
+  // ── Simple fallback pattern ───────────────────────────────────────────────
+  match = SIMPLE_EXERCISE_RE.exec(stripped);
 
-  const checkboxChar = match[1] ?? "";
-  const checked = /[vVxX]/.test(checkboxChar);
-  const name = match[2].trim().replace(/\s+/g, " ");
-  const sets = parseInt(match[3], 10);
-  const reps = (match[4] ?? "10").replace("–", "-").replace("—", "-");
-  const weight = (match[5] ?? "").trim() || "0";
+  if (match) {
+    const checkboxChar = match[1] ?? "";
+    const checked = /[vVxX]/.test(checkboxChar);
+    const name = match[2].trim().replace(/\s+/g, " ");
+    const sets = parseInt(match[3], 10);
+    const reps = (match[4] ?? "10").replace(/\u2013|\u2014/g, "-");
+    const rawWeight = (match[5] ?? "").trim().replace(/^base\s+/i, "");
+    const weight = rawWeight || "0";
 
-  // Skip if name is too short (likely a parse artifact)
-  if (name.length < 3) return null;
+    if (name.length < 3) return null;
+    return { name, sets: isNaN(sets) ? 3 : sets, reps, weight, checked, raw: line };
+  }
 
-  return {
-    name,
-    sets: isNaN(sets) ? 3 : sets,
-    reps,
-    weight,
-    checked,
-    raw: line,
-  };
+  // ── Activity fallback ─────────────────────────────────────────────────────
+  // CRITICAL: If both structured regexes fail, capture the whole line as the
+  // exercise name with default sets: 1 and reps: "1".
+  const activityMatch = ACTIVITY_RE.exec(stripped);
+  if (activityMatch) {
+    const checkboxChar = activityMatch[1] ?? "";
+    const checked = /[vVxX]/.test(checkboxChar);
+    const name = activityMatch[2].trim().replace(/\s+/g, " ");
+    if (name.length < 3) return null;
+    return { name, sets: 1, reps: "1", weight: "0", checked, raw: line };
+  }
+
+  return null;
 }
 
 export function parseWorkoutText(rawText: string): ParseResult {
