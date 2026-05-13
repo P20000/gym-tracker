@@ -1,9 +1,9 @@
 # Progress Tracker
 
-## Phase 1: Database & Auth [ ]
-- [ ] Initialize Turso Database & Auth (Clerk/Auth.js).
-- [ ] Define Drizzle Schemas (Users, Templates, Instances, Exercises) using SQLite/libSQL types.
-- [ ] Create SQLite Database View for e1RM calculations.
+## Phase 1: Database & Auth [x]
+- [x] Initialize Turso Database & Auth (Clerk/Auth.js).
+- [x] Define Drizzle Schemas (Users, Templates, Instances, Exercises) using SQLite/libSQL types.
+- [x] Create SQLite Database View for e1RM calculations.
 
 ## Phase 2: Workout Engine [ ]
 - [ ] Implement Template-to-Snapshot cloning logic.
