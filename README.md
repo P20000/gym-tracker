@@ -40,8 +40,3 @@ This project is built using a fully serverless, highly optimized stack on **Verc
 
 ---
 
-## 🛠️ Next Steps
-
-To initiate development, the source of truth will be defined through either:
-1. **Database Schema Design:** Mapping the relational schema (Prisma/Drizzle) between `Users`, `MuscleGroups`, `Exercises`, `WorkoutLogs`, and `ProteinLogs`.
-2. **Next.js Folder Structure Setup:** Setting up the serverless Next.js App Router structure with directory-based routing and Server Actions.
