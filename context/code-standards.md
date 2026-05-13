@@ -1,13 +1,11 @@
 # Code Standards
 
-## TypeScript
-- Strict typing is mandatory. No `any`.
-- Use Zod for schema validation (especially for Server Action inputs).
+## UI/UX Patterns
+- **Optimistic UI:** All workout logs must use `useOptimistic` or TanStack Query `onMutate` to ensure zero latency during sessions.
+- **Input Design:** Use `Increment/Decrement` buttons ($2.5kg$ steps) as the primary input, with a secondary numeric field for manual overrides.
+- **Charts:** Use Tremor components for all strength-over-time and volume-load diagrams.
 
-## UI/UX
-- **Mobile First:** The gym environment requires large touch targets and high-contrast text.
-- **Components:** Use ShadcnUI primitives. Custom components must be accessible (ARIA).
-
-## Performance
-- Favor Server Components for data fetching.
-- Use `useOptimistic` for marking sets as complete to provide instant feedback in the gym.
+## Backend & Database
+- **Drizzle Usage:** Use the `@libsql/client` driver with Turso. All queries must be strictly typed.
+- **Query Scoping:** Since SQLite lacks native Row Level Security (RLS), every query (`INSERT/SELECT/UPDATE/DELETE`) must be strictly filtered by the active `user_id` at the application level.
+- **Performance:** Complex aggregations for Tremor charts should be offloaded to SQLite Views or optimized indexing to keep serverless functions lightweight.

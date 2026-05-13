@@ -4,10 +4,11 @@ A serverless, mobile-first gym and progression tracker designed for seamless dai
 
 ## Architecture Overview
 
-This project is built using a fully serverless, highly optimized stack on **Vercel** and **Supabase**. This minimizes operational overhead, ensures low latency on mobile devices, and keeps running costs at $0.
+This project is built using a fully serverless, highly optimized stack on **Vercel** and **Turso**. This minimizes operational overhead, ensures low latency on mobile devices, and keeps running costs at $0.
 
 * **Frontend & API:** [Next.js](https://nextjs.org/) deployed on Vercel utilizing Server Actions for fast, direct database queries and state changes without a separate Express API.
-* **Database & Auth:** [Supabase (PostgreSQL)](https://supabase.com/) for instant managed PostgreSQL, built-in user authentication, and real-time data synchronization.
+* **Database:** [Turso](https://turso.tech/) for an ultra-fast, serverless libSQL/SQLite database with edge replication.
+* **Auth:** Clerk or Auth.js (NextAuth) for secure, serverless-optimized user sessions.
 * **State Management:** [React Query (TanStack)](https://tanstack.com/query) to handle aggressive caching, ensuring seamless transitions between workout routines and instant UI responsiveness.
 
 ---
@@ -36,7 +37,7 @@ This project is built using a fully serverless, highly optimized stack on **Verc
 | **Cold Starts** | None (Always running) | Minimal (Edge-optimized Next.js) |
 | **Monthly Cost** | ~$50+/month (Control plane, nodes, RDS) | $0 (Hobby/Free Tier) |
 | **Maintenance** | High (K8s updates, manifests, Terraform) | Zero (Direct Git push deployment) |
-| **Database Setup** | Self-managed RDS / certs | Managed (Supabase/Neon) |
+| **Database Setup** | Self-managed RDS / certs | Serverless (Turso / libSQL) |
 
 ---
 

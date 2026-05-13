@@ -1,13 +1,10 @@
 # Project Overview: Fitness Intelligence Platform
 
-## Purpose
-A high-performance, mobile-first web application designed to track hyper-specific bodybuilding progressions, muscle volume distribution, and nutritional intake.
+## Objectives
+A multi-tenant SaaS application for bodybuilders to track strength progression with high-fidelity data visualization.
 
-## Core Pillars
-1. **Progression Tracking:** Logging sets/reps with e1RM (Estimated 1-Rep Max) calculation.
-2. **Strength Visualization:** Tracking muscle group improvements via volume load diagrams.
-3. **Smart Alternatives:** Biomechanically similar exercise suggestions when primary lifts stall.
-4. **Nutrition:** Targeted protein tracking (focus on vegetarian sources like Paneer, Tofu, Milk).
-
-## Target Routine
-A 6-day split focusing on Delts/Chest/Back/Legs with specific priority on upper chest and delt detail.
+## Key Features
+1. **Immutable Logging:** Uses a snapshot approach to log workouts; once a session is finished, it is a historical record.
+2. **Strength Tracking:** Real-time dashboards using Tremor to visualize 1RM trends per muscle group.
+3. **Smart UX:** Incremental weight adjustment ($+/- 2.5kg$) designed for rapid entry during rest periods.
+4. **Knowledge Base:** Built-in static mapping for exercise alternatives (e.g., swapping a Barbell Row for a Chest-Supported Row if equipment is busy).

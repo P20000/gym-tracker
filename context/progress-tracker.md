@@ -1,15 +1,15 @@
 # Progress Tracker
 
-## Phase 1: Setup [ ]
-- [ ] Initialize Next.js with Tailwind.
-- [ ] Setup Supabase Project & Drizzle Schema.
-- [ ] Deploy "Hello World" to Vercel.
+## Phase 1: Database & Auth [ ]
+- [ ] Initialize Turso Database & Auth (Clerk/Auth.js).
+- [ ] Define Drizzle Schemas (Users, Templates, Instances, Exercises) using SQLite/libSQL types.
+- [ ] Create SQLite Database View for e1RM calculations.
 
-## Phase 2: Core Logging [ ]
-- [ ] Build Workout Session UI.
-- [ ] Implement Set/Rep logging Server Action.
-- [ ] Add Rest Timer component.
+## Phase 2: Workout Engine [ ]
+- [ ] Implement Template-to-Snapshot cloning logic.
+- [ ] Build the "Increment/Decrement" logging component.
+- [ ] Implement Optimistic Updates for set completion.
 
-## Phase 3: Analytics [ ]
-- [ ] Implement e1RM logic.
-- [ ] Build Strength Progression Chart.
+## Phase 3: Tremor Dashboards [ ]
+- [ ] Create Muscle Group Volume Chart.
+- [ ] Create e1RM Progression Line Graph.
