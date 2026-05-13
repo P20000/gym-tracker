@@ -62,15 +62,14 @@ export async function sendMagicLink(prevState: unknown, formData: FormData) {
       });
     }
 
-    // Determine host (use localhost for local dev)
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const magicLink = `${baseUrl}/login/verify?token=${token}`;
+    // Use relative path for bulletproof client navigation across all live Vercel domains
+    const magicLink = `/login/verify?token=${token}`;
 
     // Log the Magic Link prominently in the console for the developer
     console.log("\n" + "═".repeat(80));
     console.log("🔑 [GYM TRACKER] MAGIC LOGIN LINK GENERATED");
     console.log(`✉️  Email: ${email}`);
-    console.log(`🔗 Link:  \x1b[36m\x1b[4m${magicLink}\x1b[0m`);
+    console.log(`🔗 Link:  \x1b[36m\x1b[4mhttp://localhost:3000${magicLink}\x1b[0m`);
     console.log("═".repeat(80) + "\n");
 
     return {
